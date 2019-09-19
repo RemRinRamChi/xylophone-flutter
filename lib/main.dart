@@ -6,6 +6,18 @@ import 'package:flutter/material.dart';
 void main() => runApp(XylophoneApp());
 
 class XylophoneApp extends StatelessWidget {
+  Widget buildKey({Color keyColor, int soundId}) {
+    return Expanded(
+      child: FlatButton(
+        color: keyColor,
+        onPressed: () {
+          final player = AudioCache();
+          player.play('note$soundId.wav');
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -13,32 +25,13 @@ class XylophoneApp extends StatelessWidget {
         body: SafeArea(
           child: Container(
             child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: List.generate(7, (n) => n + 1)
-                    .map((id) => XyloPhoneKey(id))
+                    .map((id) =>
+                        buildKey(soundId: id, keyColor: Colors.primaries[id]))
                     .toList()),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class XyloPhoneKey extends StatelessWidget {
-  final Color keyColor =
-      Colors.primaries[Random().nextInt(Colors.primaries.length)];
-  final int soundId;
-
-  XyloPhoneKey(this.soundId);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: keyColor,
-      child: FlatButton(
-        onPressed: () {
-          final player = AudioCache();
-          player.play('note$soundId.wav');
-        },
       ),
     );
   }
